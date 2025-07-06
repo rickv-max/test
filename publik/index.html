@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Kanvas Interaktif</title>
+    <!-- Tailwind CSS CDN untuk styling yang mudah -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Styling dasar untuk body dan canvas */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f4f8; /* Warna latar belakang lembut */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        canvas {
+            background-color: #ffffff; /* Latar belakang kanvas putih */
+            border: 2px solid #cbd5e1; /* Border abu-abu lembut */
+            border-radius: 12px; /* Sudut membulat */
+            display: block;
+            touch-action: none; /* Mencegah default touch actions seperti scrolling */
+            max-width: 100%; /* Memastikan kanvas responsif */
+            height: auto; /* Mempertahankan rasio aspek */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px; /* Lebar maksimum untuk konten */
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .message-box {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0; /* Awalnya tersembunyi */
+        }
+        .message-box.show {
+            opacity: 1; /* Tampilkan */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Aplikasi Kanvas Interaktif</h1>
+        <p class="text-gray-600 text-center mb-6">Klik lingkaran atau tombol untuk mengubah warnanya!</p>
+
+        <!-- Elemen Canvas -->
+        <canvas id="myCanvas" width="400" height="400">
+            <!-- Pesan fallback jika browser tidak mendukung Canvas atau JS gagal -->
+            Browser Anda tidak mendukung elemen HTML Canvas.
+        </canvas>
+
+        <!-- Tombol untuk interaksi -->
+        <div class="button-group">
+            <button id="changeColorBtn" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
+                Ubah Warna
+            </button>
+        </div>
+
+        <!-- Area pesan untuk umpan balik -->
+        <div id="messageBox" class="mt-4 p-3 rounded-lg hidden message-box"></div>
+    </div>
+
+    <script>
+        // Deklarasi variabel di luar scope DOMContentLoaded agar lebih mudah diakses
+        let canvas, ctx, changeColorBtn, messageBox;
+        let circleColor = '#FF5733'; // Warna awal lingkaran
+
+        // Fungsi untuk menampilkan pesan di kotak pesan
+        function showMessage(message, type = 'info') {
+            if (!messageBox) {
+                console.warn("messageBox element not found.");
+                return;
+            }
+
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            if (type === 'info') {
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            }
+            messageBox.classList.add('show'); // Tambahkan kelas 'show' untuk menampilkan dengan transisi
+
+            setTimeout(() => {
+                messageBox.classList.remove('show'); // Hapus kelas 'show' untuk fade out
+                setTimeout(() => {
+                    messageBox.classList.add('hidden'); // Sembunyikan setelah transisi selesai
+                }, 300); // Sesuaikan dengan durasi transisi CSS
+            }, 3000); // Sembunyikan pesan setelah 3 detik
+        }
+
+        // Fungsi untuk menggambar lingkaran
+        function drawCircle() {
+            if (!ctx || !canvas) {
+                console.error("Canvas context or element not available for drawing.");
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan kanvas
+
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, 80, 0, Math.PI * 2);
+            ctx.fillStyle = circleColor;
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        // Fungsi untuk menghasilkan warna heksadesimal acak
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Fungsi untuk menangani perubahan warna
+        function handleChangeColor() {
+            circleColor = getRandomColor();
+            drawCircle();
+            showMessage(`Warna lingkaran diubah menjadi ${circleColor}!`);
+        }
+
+        // Fungsi untuk menyesuaikan ukuran kanvas agar responsif
+        function resizeCanvas() {
+            if (!canvas || !canvas.parentElement) {
+                console.warn("Canvas or parent element not available for resizing.");
+                return;
+            }
+            const containerWidth = canvas.parentElement.clientWidth;
+            const newCanvasWidth = Math.min(containerWidth - 40, 600);
+            canvas.width = newCanvasWidth;
+            canvas.height = newCanvasWidth; // Pertahankan rasio aspek 1:1
+            drawCircle(); // Gambar ulang lingkaran setelah perubahan ukuran
+        }
+
+        // Jalankan skrip setelah DOM sepenuhnya dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                canvas = document.getElementById('myCanvas');
+                if (!canvas) {
+                    console.error("Error: Canvas element with ID 'myCanvas' not found. Check HTML structure.");
+                    showMessage("Aplikasi tidak dapat dimuat. Elemen kanvas tidak ditemukan.", "error");
+                    return;
+                }
+
+                ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error("Error: 2D rendering context not available for canvas. Your browser might not support it.");
+                    showMessage("Aplikasi tidak dapat dimuat. Konteks kanvas 2D tidak tersedia.", "error");
+                    return;
+                }
+
+                changeColorBtn = document.getElementById('changeColorBtn');
+                messageBox = document.getElementById('messageBox');
+
+                // Tambahkan event listener
+                canvas.addEventListener('click', handleChangeColor);
+                canvas.addEventListener('touchstart', handleChangeColor, { passive: true });
+
+                if (changeColorBtn) {
+                    changeColorBtn.addEventListener('click', handleChangeColor);
+                    changeColorBtn.addEventListener('touchstart', handleChangeColor, { passive: true });
+                } else {
+                    console.warn("Button with ID 'changeColorBtn' not found.");
+                }
+
+                // Panggil resizeCanvas dan gambar lingkaran pertama kali
+                resizeCanvas();
+                console.log('Aplikasi kanvas berhasil diinisialisasi.');
+
+            } catch (error) {
+                console.error("Terjadi kesalahan fatal saat menginisialisasi aplikasi kanvas:", error);
+                showMessage(`Terjadi kesalahan: ${error.message}. Silakan coba lagi.`, "error");
+            }
+        });
+
+        // Panggil resizeCanvas saat jendela diubah ukurannya
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>
