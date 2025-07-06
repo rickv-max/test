@@ -3,196 +3,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kanvas Interaktif</title>
-    <!-- Tailwind CSS CDN untuk styling yang mudah -->
+    <title>Bakti Hukum KKN - Minimalis Modern</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Styling dasar untuk body dan canvas */
+        /* Custom CSS for minimalist modern Gen Z aesthetic */
         body {
             font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8edf2 100%); /* Lighter, more subtle gradient background */
+            color: #2d3748; /* Slightly softer dark text */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: #f0f4f8; /* Warna latar belakang lembut */
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        canvas {
-            background-color: #ffffff; /* Latar belakang kanvas putih */
-            border: 2px solid #cbd5e1; /* Border abu-abu lembut */
-            border-radius: 12px; /* Sudut membulat */
-            display: block;
-            touch-action: none; /* Mencegah default touch actions seperti scrolling */
-            max-width: 100%; /* Memastikan kanvas responsif */
-            height: auto; /* Mempertahankan rasio aspek */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+            align-items: center;
+            padding: 1rem; /* Reduced overall padding */
         }
         .container {
+            max-width: 1000px; /* Slightly narrower container for more focus */
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 600px; /* Lebar maksimum untuk konten */
+            gap: 1.25rem; /* Reduced consistent spacing between major sections */
         }
-        .button-group {
+        .header-hero {
+            background: linear-gradient(45deg, #5a67d8, #7f5ad6, #e9598c); /* Refined multi-color vibrant gradient */
+            color: #ffffff;
+            padding: 2rem 1.5rem; /* Reduced padding */
+            border-radius: 1rem; /* Slightly less rounded corners for hero */
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 5px 10px -3px rgba(0, 0, 0, 0.08); /* Softer, less deep shadow */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .header-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%); /* Lighter overlay */
+            transform: rotate(20deg);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .header-hero h1 {
+            font-size: 3rem; /* Slightly smaller title */
+            font-weight: 900;
+            letter-spacing: -0.04em; /* Slightly less tight spacing */
+            line-height: 1.1;
+            margin-bottom: 0.6rem; /* Reduced margin */
+        }
+        .header-hero p.tagline {
+            font-size: 1.1rem; /* Slightly smaller tagline */
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 1.25rem; /* Reduced margin */
+        }
+        .user-id-badge {
+            background-color: rgba(255, 255, 255, 0.2); /* More subtle transparency */
+            padding: 0.3rem 0.75rem; /* Reduced padding */
+            border-radius: 9999px;
+            font-size: 0.85rem; /* Slightly smaller font */
+            font-weight: 600;
+            backdrop-filter: blur(6px); /* Softer blur */
+            border: 1px solid rgba(255, 255, 255, 0.25); /* Lighter border */
+            display: inline-block;
+        }
+
+        /* Navigation Bar */
+        .nav-container {
+            background-color: rgba(255, 255, 255, 0.7); /* More transparent white */
+            backdrop-filter: blur(8px); /* Softer blur */
+            padding: 0.6rem; /* Reduced padding */
+            border-radius: 0.8rem; /* Smaller rounded corners */
+            box-shadow: 0 6px 12px -3px rgba(0, 0, 0, 0.08), 0 3px 6px -1px rgba(0, 0, 0, 0.04); /* Softer shadow */
             display: flex;
-            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem; /* Reduced space between buttons */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Lighter border for glass effect */
         }
-        .message-box {
-            transition: opacity 0.3s ease-in-out;
-            opacity: 0; /* Awalnya tersembunyi */
+        .nav-button {
+            padding: 0.75rem 1.5rem; /* Reduced padding */
+            border-radius: 0.7rem; /* Slightly less pill-shaped */
+            font-size: 0.95rem; /* Slightly smaller text */
+            font-weight: 600; /* Semi-bold text */
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); /* Slightly faster transitions */
+            color: #4a5568;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
         }
-        .message-box.show {
-            opacity: 1; /* Tampilkan */
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.03); /* More subtle dark hover */
+            color: #2d3748;
+            transform: translateY(-2px) scale(1.01); /* Less pronounced lift and grow */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        .nav-button.active {
+            background: linear-gradient(90deg, #4263eb, #6a5acd); /* Refined active button gradient */
+            color: #ffffff;
+            box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 0.1), 0 2px 5px -1px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px); /* Less lift active button */
+        }
+        .nav-button.active::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* Slightly narrower underline */
+            height: 3px; /* Thinner underline */
+            background-color: #a78bfa;
+            border-radius: 2px;
+            opacity: 0;
+            animation: slideIn 0.3s forwards cubic-bezier(0.2, 0.8, 0.2, 1); /* Faster animation */
+        }
+
+        @keyframes slideIn {
+            from { width: 0%; opacity: 0; }
+            to { width: 80%; opacity: 1; }
+        }
+
+        /* Main Content Area */
+        .main-content-area {
+            background-color: rgba(255, 255, 255, 0.75); /* Slightly less transparent */
+            backdrop-filter: blur(8px);
+            border-radius: 1rem; /* Reduced rounded corners */
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.75rem; /* Reduced padding */
+            border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+        @media (min-width: 640px) {
+            .main-content-area {
+                padding: 2rem; /* Reduced padding */
+            }
+        }
+        .section-title {
+            font-size: 2rem; /* Slightly smaller section titles */
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 1.5rem; /* Reduced space below title */
+            text-align: center;
+        }
+
+        /* Cards (Edukasi/Sumber Daya) */
+        .card {
+            background-color: rgba(255, 255, 255, 0.5); /* More subtle transparency */
+            backdrop-filter: blur(6px); /* Softer blur for cards */
+            padding: 1.5rem; /* Reduced padding */
+            border-radius: 0.8rem; /* Reduced rounded corners */
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04); /* Softer shadow */
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Lighter border */
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 50%); /* Lighter overlay */
+            z-index: -1;
+        }
+        .card:hover {
+            transform: translateY(-5px) scale(1.005); /* Less pronounced lift and slight grow */
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card h3 {
+            font-size: 1.3rem; /* Slightly smaller card titles */
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.6rem; /* Reduced margin */
+            line-height: 1.3;
+        }
+        .card p.category {
+            font-size: 0.85rem; /* Slightly smaller category text */
+            color: #6d28d9;
+            font-weight: 600;
+            margin-bottom: 0.8rem; /* Reduced margin */
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .card p.description {
+            font-size: 0.95rem; /* Slightly smaller description text */
+            color: #4a5568;
+            margin-bottom: 1rem; /* Reduced margin */
+            line-height: 1.5;
+        }
+        .card a {
+            color: #4338ca;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .card a:hover {
+            color: #3730a3;
+            transform: translateX(3px); /* Less pronounced slide on hover */
+        }
+
+        /* Form Elements */
+        .form-label {
+            display: block;
+            color: #2d3748;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem; /* Reduced margin */
+        }
+        .form-input, .form-textarea, .form-select {
+            border: 1px solid #cbd5e0;
+            border-radius: 0.6rem; /* Slightly less rounded inputs */
+            padding: 0.75rem 1rem; /* Reduced padding */
+            width: 100%;
+            font-size: 0.95rem; /* Slightly smaller font */
+            color: #4a5568;
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly less transparent input background */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); /* Softer focus ring */
+            background-color: #ffffff;
+        }
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(90deg, #4263eb, #6a5acd); /* Refined gradient button */
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.75rem 1.25rem; /* Reduced padding */
+            border-radius: 0.6rem; /* Reduced rounded button */
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 6px 12px -3px rgba(0, 0, 0, 0.1), 0 3px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .submit-button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px) scale(1.005); /* Less lift and scale */
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Table Styling */
+        .table-container {
+            background-color: rgba(255, 255, 255, 0.5); /* Glassmorphism for table container */
+            backdrop-filter: blur(6px); /* Softer blur */
+            border-radius: 0.8rem; /* Reduced rounded corners */
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            overflow-x: auto;
+        }
+        .table-header th {
+            background-color: rgba(226, 232, 240, 0.4); /* Lighter header background */
+            padding: 0.8rem 1.25rem; /* Reduced padding */
+            text-align: left;
+            font-size: 0.8rem; /* Slightly smaller font */
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        .table-row td {
+            padding: 0.9rem 1.25rem; /* Reduced padding */
+            font-size: 0.9rem; /* Slightly smaller font */
+            color: #4a5568;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        .table-row:last-child td {
+            border-bottom: none;
+        }
+        .table-row:nth-child(even) {
+            background-color: rgba(247, 250, 252, 0.3); /* More subtle zebra striping */
+        }
+        .status-badge {
+            padding: 0.2rem 0.6rem; /* Reduced padding */
+            border-radius: 9999px;
+            font-size: 0.7rem; /* Slightly smaller font */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .status-badge.new {
+            background-color: #fef9c3; /* Lighter yellow */
+            color: #a16207; /* Darker yellow text */
+        }
+        .status-badge.processing {
+            background-color: #bfdbfe;
+            color: #1e40af;
+        }
+        .status-badge.completed {
+            background-color: #dcfce7; /* Lighter green */
+            color: #15803d; /* Darker green text */
+        }
+
+        /* General Tab Content Animation */
+        .tab-content {
+            animation: fadeInScale 0.5s ease-out forwards; /* Slightly faster animation */
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translateY(15px) scale(0.99); } /* Less pronounced movement and scale */
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Aplikasi Kanvas Interaktif</h1>
-        <p class="text-gray-600 text-center mb-6">Klik lingkaran atau tombol untuk mengubah warnanya!</p>
+        <header class="header-hero">
+            <h1 class="mb-2 sm:mb-0">Bakti Hukum KKN</h1>
+            <p class="tagline">Mewujudkan Keadilan dan Pemberdayaan Hukum di Pedesaan</p>
+            <div class="user-id-badge">
+                ID Pengguna: <span class="font-semibold">contoh-id-pengguna-12345</span>
+            </div>
+        </header>
 
-        <!-- Elemen Canvas -->
-        <canvas id="myCanvas" width="400" height="400">
-            <!-- Pesan fallback jika browser tidak mendukung Canvas atau JS gagal -->
-            Browser Anda tidak mendukung elemen HTML Canvas.
-        </canvas>
+        <nav class="nav-container">
+            <button class="nav-button active" onclick="showTab(event, 'edukasi')">Edukasi Hukum</button>
+            <button class="nav-button" onclick="showTab(event, 'ajukan')">Ajukan Bantuan</button>
+            <button class="nav-button" onclick="showTab(event, 'sumber')">Sumber Daya</button>
+            <button class="nav-button" onclick="showTab(event, 'permintaan')">Permintaan Bantuan (Tim KKN)</button>
+        </nav>
 
-        <!-- Tombol untuk interaksi -->
-        <div class="button-group">
-            <button id="changeColorBtn" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
-                Ubah Warna
-            </button>
-        </div>
+        <main class="main-content-area">
+            <!-- Edukasi Hukum Tab -->
+            <div id="edukasi" class="tab-content">
+                <h2 class="section-title">Materi Edukasi Hukum</h2>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="card">
+                        <h3>Hak-Hak Perempuan dalam Keluarga</h3>
+                        <p class="category">Perlindungan Perempuan & Anak</p>
+                        <p class="description">Memahami hak dan kewajiban dalam perkawinan, perceraian, dan perlindungan dari kekerasan dalam rumah tangga.</p>
+                        <a href="#" class="inline-flex items-center">
+                            Baca Lebih Lanjut
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <h3>Legalitas Usaha Mikro (NIB)</h3>
+                        <p class="category">UMKM & Legalitas Usaha</p>
+                        <p class="description">Panduan mudah mengurus Nomor Induk Berusaha (NIB) untuk UMKM Anda, langkah awal menuju usaha yang legal dan berkembang.</p>
+                        <a href="#" class="inline-flex items-center">
+                            Baca Lebih Lanjut
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <h3>Penyelesaian Sengketa Tanah Sederhana</h3>
+                        <p class="category">Sengketa Tanah</p>
+                        <p class="description">Langkah-langkah mediasi dan jalur hukum non-litigasi untuk menyelesaikan sengketa batas tanah antarwarga secara damai.</p>
+                        <a href="#" class="inline-flex items-center">
+                            Baca Lebih Lanjut
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Area pesan untuk umpan balik -->
-        <div id="messageBox" class="mt-4 p-3 rounded-lg hidden message-box"></div>
+            <!-- Ajukan Bantuan Tab -->
+            <div id="ajukan" class="tab-content hidden">
+                <h2 class="section-title">Ajukan Bantuan Hukum</h2>
+                <form class="bg-white p-6 rounded-xl shadow-md border border-gray-200 max-w-xl mx-auto">
+                    <div class="mb-4">
+                        <label for="name-form" class="form-label">Nama Lengkap:</label>
+                        <input type="text" id="name-form" class="form-input" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="contact-form" class="form-label">Nomor Telepon/Email:</label>
+                        <input type="text" id="contact-form" class="form-input" placeholder="081234567890 atau email@contoh.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="category-form" class="form-label">Kategori Masalah:</label>
+                        <select id="category-form" class="form-select" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Perlindungan Perempuan & Anak">Perlindungan Perempuan & Anak</option>
+                            <option value="UMKM & Legalitas Usaha">UMKM & Legalitas Usaha</option>
+                            <option value="Sengketa Tanah">Sengketa Tanah</option>
+                            <option value="Warisan">Warisan</option>
+                            <option value="Hukum Keluarga">Hukum Keluarga</option>
+                            <option value="Lain-lain">Lain-lain</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label for="issueDescription-form" class="form-label">Deskripsi Masalah:</label>
+                        <textarea id="issueDescription-form" rows="5" class="form-textarea" placeholder="Jelaskan masalah hukum yang Anda hadapi secara rinci..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        Kirim Permohonan (Tidak Berfungsi di Versi Statis)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Sumber Daya Tab -->
+            <div id="sumber" class="tab-content hidden">
+                <h2 class="section-title">Sumber Daya Hukum</h2>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="card">
+                        <h3>LBH Peduli Desa</h3>
+                        <p class="category">Lembaga Bantuan Hukum</p>
+                        <p class="description">Menyediakan bantuan hukum gratis untuk masyarakat kurang mampu dan pendampingan litigasi.</p>
+                        <p class="text-gray-600 text-sm mb-2">Kontak: (021) 12345678</p>
+                        <p class="text-gray-600 text-sm">Alamat: Jl. Raya Desa No. 10, [Nama Kota]</p>
+                    </div>
+                    <div class="card">
+                        <h3>Pusat Pelayanan Terpadu PPA</h3>
+                        <p class="category">Pemerintah Daerah</p>
+                        <p class="description">Layanan terpadu untuk korban kekerasan perempuan dan anak, termasuk konseling dan perlindungan.</p>
+                        <p class="text-gray-600 text-sm mb-2">Kontak: 112 (Darurat)</p>
+                        <p class="text-gray-600 text-sm">Alamat: Kantor Dinas Sosial Kab. [Nama Kabupaten]</p>
+                    </div>
+                    <div class="card">
+                        <h3>Kantor Urusan Agama (KUA)</h3>
+                        <p class="category">Lembaga Agama & Hukum</p>
+                        <p class="description">Informasi dan layanan terkait hukum perkawinan Islam, perceraian, dan warisan.</p>
+                        <p class="text-gray-600 text-sm mb-2">Kontak: (021) 98765432</p>
+                        <p class="text-gray-600 text-sm">Alamat: Jl. Agama No. 5, [Nama Desa]</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permintaan Bantuan Tab (Tim KKN) -->
+            <div id="permintaan" class="tab-content hidden">
+                <h2 class="section-title">Daftar Permintaan Bantuan Hukum (Contoh Statis)</h2>
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="table-header">
+                            <tr>
+                                <th scope="col" class="rounded-tl-lg">Waktu</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Kategori</th>
+                                <th scope="col" class="rounded-tr-lg">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="table-row">
+                                <td class="px-6 py-4 whitespace-nowrap">01/07/2025 10:30</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Budi Santoso</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Sengketa Tanah</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="status-badge new">Baru</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="px-6 py-4 whitespace-nowrap">30/06/2025 14:15</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Siti Aminah</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Perlindungan Perempuan & Anak</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="status-badge processing">Diproses</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="px-6 py-4 whitespace-nowrap">28/06/2025 09:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Pak Kades</td>
+                                <td class="px-6 py-4 whitespace-nowrap">UMKM & Legalitas Usaha</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="status-badge completed">Selesai</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        // Deklarasi variabel di luar scope DOMContentLoaded agar lebih mudah diakses
-        let canvas, ctx, changeColorBtn, messageBox;
-        let circleColor = '#FF5733'; // Warna awal lingkaran
+        function showTab(event, tabId) {
+            // Sembunyikan semua konten tab
+            document.querySelectorAll('.tab-content').forEach(tabContent => {
+                tabContent.classList.add('hidden');
+            });
 
-        // Fungsi untuk menampilkan pesan di kotak pesan
-        function showMessage(message, type = 'info') {
-            if (!messageBox) {
-                console.warn("messageBox element not found.");
-                return;
-            }
+            // Hapus kelas 'active' dari semua tombol navigasi
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
 
-            messageBox.textContent = message;
-            messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
-            if (type === 'info') {
-                messageBox.classList.add('bg-green-100', 'text-green-800');
-            } else if (type === 'error') {
-                messageBox.classList.add('bg-red-100', 'text-red-800');
-            }
-            messageBox.classList.add('show'); // Tambahkan kelas 'show' untuk menampilkan dengan transisi
+            // Tampilkan konten tab yang dipilih
+            document.getElementById(tabId).classList.remove('hidden');
 
-            setTimeout(() => {
-                messageBox.classList.remove('show'); // Hapus kelas 'show' untuk fade out
-                setTimeout(() => {
-                    messageBox.classList.add('hidden'); // Sembunyikan setelah transisi selesai
-                }, 300); // Sesuaikan dengan durasi transisi CSS
-            }, 3000); // Sembunyikan pesan setelah 3 detik
+            // Tambahkan kelas 'active' ke tombol yang diklik
+            event.currentTarget.classList.add('active');
         }
 
-        // Fungsi untuk menggambar lingkaran
-        function drawCircle() {
-            if (!ctx || !canvas) {
-                console.error("Canvas context or element not available for drawing.");
-                return;
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan kanvas
-
-            ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, 80, 0, Math.PI * 2);
-            ctx.fillStyle = circleColor;
-            ctx.fill();
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-        // Fungsi untuk menghasilkan warna heksadesimal acak
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        // Fungsi untuk menangani perubahan warna
-        function handleChangeColor() {
-            circleColor = getRandomColor();
-            drawCircle();
-            showMessage(`Warna lingkaran diubah menjadi ${circleColor}!`);
-        }
-
-        // Fungsi untuk menyesuaikan ukuran kanvas agar responsif
-        function resizeCanvas() {
-            if (!canvas || !canvas.parentElement) {
-                console.warn("Canvas or parent element not available for resizing.");
-                return;
-            }
-            const containerWidth = canvas.parentElement.clientWidth;
-            const newCanvasWidth = Math.min(containerWidth - 40, 600);
-            canvas.width = newCanvasWidth;
-            canvas.height = newCanvasWidth; // Pertahankan rasio aspek 1:1
-            drawCircle(); // Gambar ulang lingkaran setelah perubahan ukuran
-        }
-
-        // Jalankan skrip setelah DOM sepenuhnya dimuat
+        // Set default tab to 'edukasi' on load
         document.addEventListener('DOMContentLoaded', () => {
-            try {
-                canvas = document.getElementById('myCanvas');
-                if (!canvas) {
-                    console.error("Error: Canvas element with ID 'myCanvas' not found. Check HTML structure.");
-                    showMessage("Aplikasi tidak dapat dimuat. Elemen kanvas tidak ditemukan.", "error");
-                    return;
-                }
-
-                ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    console.error("Error: 2D rendering context not available for canvas. Your browser might not support it.");
-                    showMessage("Aplikasi tidak dapat dimuat. Konteks kanvas 2D tidak tersedia.", "error");
-                    return;
-                }
-
-                changeColorBtn = document.getElementById('changeColorBtn');
-                messageBox = document.getElementById('messageBox');
-
-                // Tambahkan event listener
-                canvas.addEventListener('click', handleChangeColor);
-                canvas.addEventListener('touchstart', handleChangeColor, { passive: true });
-
-                if (changeColorBtn) {
-                    changeColorBtn.addEventListener('click', handleChangeColor);
-                    changeColorBtn.addEventListener('touchstart', handleChangeColor, { passive: true });
-                } else {
-                    console.warn("Button with ID 'changeColorBtn' not found.");
-                }
-
-                // Panggil resizeCanvas dan gambar lingkaran pertama kali
-                resizeCanvas();
-                console.log('Aplikasi kanvas berhasil diinisialisasi.');
-
-            } catch (error) {
-                console.error("Terjadi kesalahan fatal saat menginisialisasi aplikasi kanvas:", error);
-                showMessage(`Terjadi kesalahan: ${error.message}. Silakan coba lagi.`, "error");
+            const defaultTabButton = document.querySelector('.nav-button.active');
+            if (defaultTabButton) {
+                defaultTabButton.click();
+            } else {
+                // Fallback if no active class is set initially
+                document.getElementById('edukasi').classList.remove('hidden');
             }
         });
-
-        // Panggil resizeCanvas saat jendela diubah ukurannya
-        window.addEventListener('resize', resizeCanvas);
     </script>
 </body>
 </html>
